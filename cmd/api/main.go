@@ -1,7 +1,7 @@
 package main
 
 import (
-	//_ "github.com/amalmadhu06/go-jwt-bearer-token/cmd/api/docs"
+	_ "github.com/amalmadhu06/go-jwt-bearer-token/cmd/api/docs"
 	"github.com/amalmadhu06/go-jwt-bearer-token/pkg/config"
 	"github.com/amalmadhu06/go-jwt-bearer-token/pkg/di"
 
@@ -10,9 +10,9 @@ import (
 
 func main() {
 
-	// @title Go Web API | JWT Bearer Token
+	// @title Auth 2.0 | Go | JWT | Access & Refresh Tokens
 	// @version 1.0
-	// @description Go Web API to understand the implementation of jwt bearer token for authentication. Uses Gin and PostgreSQL. Follows clean architecture.
+	// @description Go Web API to understand the implementation of jwt bearer token for authentication. Uses Gin and PostgresSQL. Follows clean architecture.
 
 	// @contact.name API Support
 	// @contact.url http://www.swagger.io/support
@@ -22,6 +22,10 @@ func main() {
 	// @host localhost:3000
 	// @license.url https://opensource.org/licenses/MIT
 
+	// @securityDefinitions.apikey BearerAuth
+	// @in header
+	// @name Authorization
+	// @host localhost
 	// @BasePath /
 	// @query.collection.format multi
 

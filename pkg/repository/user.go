@@ -17,7 +17,7 @@ func NewUserRepository(DB *gorm.DB) interfaces.UserRepository {
 
 func (c *userRepo) CreateUser(ctx context.Context, user domain.User) (domain.User, error) {
 	var userDB domain.User
-	createQuery := `INSERT INTO users(email, password) VALUES($1,$2) RETURNING *;`
+	createQuery := `INSERT INTO users(email, password, created_at) VALUES($1,$2, NOW()) RETURNING id, email, created_at;`
 	err := c.DB.Raw(createQuery, user.Email, user.Password).Scan(&userDB).Error
 	return userDB, err
 }
@@ -36,7 +36,6 @@ func (c *userRepo) ViewAllProducts(ctx context.Context) ([]domain.Product, error
 	if err != nil {
 		return allProducts, err
 	}
-
 	defer rows.Close()
 	for rows.Next() {
 		var product domain.Product

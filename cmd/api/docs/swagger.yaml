@@ -1,0 +1,291 @@
+definitions:
+  domain.Admin:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        minLength: 8
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  domain.Product:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  domain.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        minLength: 8
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Go Web API to understand the implementation of jwt bearer token for
+    authentication. Uses Gin and PostgreSQL. Follows clean architecture.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Go Web API | JWT Bearer Token
+  version: "1.0"
+paths:
+  /access:
+    post:
+      consumes:
+      - application/json
+      description: Access token can be generated with a valid refresh token
+      operationId: get-access-token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Get access token with refresh token
+      tags:
+      - Auth
+  /admin-panel/login:
+    post:
+      consumes:
+      - application/json
+      description: Admin can log in with email and password
+      operationId: admin-login
+      parameters:
+      - description: admin credentials for logging in
+        in: body
+        name: admin_credentials
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Admin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Admin Login
+      tags:
+      - Admin
+  /admin-panel/logout:
+    post:
+      consumes:
+      - application/json
+      description: Admin can log out of the website
+      operationId: admin-logout
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Admin Logout
+      tags:
+      - Admin
+  /admin-panel/product:
+    get:
+      consumes:
+      - application/json
+      description: Admin can can see listed products
+      operationId: admin-view-products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: View Products
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Admin can add products to inventory
+      operationId: add-product
+      parameters:
+      - description: product details
+        in: body
+        name: product_details
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Product'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Add product to inventory
+      tags:
+      - Product
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: User can log in with email and password
+      operationId: user-login
+      parameters:
+      - description: user credentials for logging in
+        in: body
+        name: user_credentials
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: User Login
+      tags:
+      - User
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: User can log out of the website
+      operationId: user-logout
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Temporary Redirect
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: User Logout
+      tags:
+      - User
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: User can can see listed products after logging in
+      operationId: view-products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: View Products
+      tags:
+      - Product
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: User can sign up with email and password
+      operationId: user-signup
+      parameters:
+      - description: user credentials for creating new account
+        in: body
+        name: user_credentials
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: User Signup
+      tags:
+      - User
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

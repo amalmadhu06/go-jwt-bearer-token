@@ -19,33 +19,33 @@ func NewServerHTTP(userHandler *handler.UserHandler, adminHandler *handler.Admin
 	//	logger logs following info for each request : http method, req URL, remote address of the client, res status code, elapsed time
 	engine.Use(gin.Logger())
 
-	//	handler for generating swagger docs
+	// swagger docs
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	user := engine.Group("/")
 	{
 		user.POST("/signup", userHandler.UserSignup)
 		user.POST("/login", userHandler.UserLogin)
-		user.GET("/logout", userHandler.UserLogout)
-
+		user.POST("/logout", userHandler.UserLogout)
+		user.POST("/access", userHandler.GetAccessToken)
 		//use middleware here and write some routes which needs it
-		user.Use(middleware.AuthorizeJWT)
+		user.Use(middleware.AuthorizeUser)
 		{
-			user.GET("/view-all-products", userHandler.ViewAllProducts)
+			user.GET("/products", userHandler.ViewAllProducts)
 		}
 
 	}
 
-	adminPanel := engine.Group("adminPanel")
+	adminPanel := engine.Group("admin-panel")
 	{
 		adminPanel.POST("/login", adminHandler.AdminLogin)
-		adminPanel.GET("/logout", adminHandler.AdminLogout)
+		adminPanel.POST("/logout", adminHandler.AdminLogout)
 
 		//use middleware here and write some routes which needs it
-		adminPanel.Use(middleware.AuthorizeJWT)
+		adminPanel.Use(middleware.AuthorizeAdmin)
 		{
-			adminPanel.POST("/add-new-product", adminHandler.AddProduct)
-			adminPanel.GET("/view-all-product", adminHandler.ViewAllProducts)
+			adminPanel.POST("/product", adminHandler.AddProduct)
+			adminPanel.GET("/product", adminHandler.ViewAllProducts)
 		}
 
 	}

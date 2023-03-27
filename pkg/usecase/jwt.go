@@ -45,11 +45,8 @@ func (j *JWTUseCase) GenerateAccessToken(userid int, username string, role strin
 		"email":  username,
 		"role":   role,
 		"source": "accesstoken",
-		"exp":    time.Now().Local().Add(time.Hour * 24).Unix(),
+		"exp":    time.Now().Local().Add(time.Minute * 15).Unix(),
 	}
-	//todo : delete log after debugging
-	fmt.Println("expiration time set in claims", claims["exp"])
-	fmt.Printf("Data type of expiration : %T", claims["exp"])
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(j.SecretKey))
 	if err != nil {
@@ -61,6 +58,7 @@ func (j *JWTUseCase) GenerateAccessToken(userid int, username string, role strin
 
 func (j *JWTUseCase) ParseToken(signedToken string) (*jwt.Token, *domain.JWTError) {
 	token, err := jwt.Parse(signedToken, func(token *jwt.Token) (interface{}, error) {
+		fmt.Println(token)
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, &domain.JWTError{Code: http.StatusUnauthorized, Message: "unexpected signing method"}
 		}
@@ -75,6 +73,10 @@ func (j *JWTUseCase) ParseToken(signedToken string) (*jwt.Token, *domain.JWTErro
 					Message: "token malformed",
 				}
 			} else if validationErr.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
+				fmt.Println(validationErr.Errors)
+				fmt.Println(jwt.ValidationErrorExpired)
+				fmt.Println(jwt.ValidationErrorNotValidYet)
+
 				return nil, &domain.JWTError{
 					Code:    http.StatusUnauthorized,
 					Message: "token expired or not yet valid",
@@ -123,7 +125,6 @@ func (j *JWTUseCase) VerifyToken(signedToken string) (bool, *domain.SignedDetail
 		Role:   claims["role"].(string),
 		Source: claims["source"].(string),
 		Exp:    int64(claims["exp"].(float64)),
-		//ExpiresAt: time.Unix(int64(claims["exp"].(float64)), 0),
 	}
 
 	if err := signedDetails.Valid(); err != nil {
