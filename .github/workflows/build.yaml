@@ -41,6 +41,10 @@ jobs:
         run: |
           cd pkg/di && go run github.com/google/wire/cmd/wire
 
+      - name: Install swag
+        run: |
+          go get github.com/swaggo/swag/cmd/swag
+
       - name: Generate Swagger docs
         run: |
           cd cmd/api && go get -u github.com/swaggo/swag/cmd/swag
