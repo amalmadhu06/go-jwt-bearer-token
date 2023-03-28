@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	// @title Auth 2.0 | Go | JWT | Access & Refresh Tokens
+	// @title Go | JWT | Access & Refresh Tokens
 	// @version 1.0
 	// @description Go Web API to understand the implementation of jwt bearer token for authentication. Uses Gin and PostgresSQL. Follows clean architecture.
 
