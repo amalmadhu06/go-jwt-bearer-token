@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: |
           go mod download
+          go get github.com/google/subcommands
+          go mod tidy
+
 
       - name: Generate wire_gen.go
         run: |
