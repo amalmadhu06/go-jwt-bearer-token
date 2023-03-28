@@ -43,6 +43,9 @@ jobs:
 
       - name: Install swag
         run: |
+          go get github.com/swaggo/swag/cmd/swag
+          go get github.com/swaggo/swag/gen@v1.8.1
+          go get github.com/swaggo/swag/cmd/swag@v1.8.1
           go install github.com/swaggo/swag/cmd/swag
 
       - name: Generate Swagger docs
