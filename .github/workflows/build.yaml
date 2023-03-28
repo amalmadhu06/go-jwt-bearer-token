@@ -26,6 +26,8 @@ jobs:
       - name: Install dependencies
         run: |
           go mod download
+          go mod tidy
+          go mod verify
 
       - name: Install subcommands
         run: |
@@ -34,10 +36,6 @@ jobs:
       - name: Install wire
         run: |
           go get github.com/google/wire/cmd/wire@v0.5.0
-
-      - name: Go mod tidy
-        run: |
-          go mod tidy
 
       - name: Generate wire_gen.go
         run: |
@@ -48,23 +46,7 @@ jobs:
           cd cmd/api && go get -u github.com/swaggo/swag/cmd/swag
           swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
 
-#      - name: Lint code
-#        run: |
-#          go install github.com/golangci/golangci-lint/cmd/golangci-lint
-#          golangci-lint run ./...
-
       - name: Build the Go application
         run: |
           mkdir -p build/bin
           go build -o build/bin/myapp ./cmd/api
-
-#      - name: Run tests
-#        run: |
-#          go test -v -race ./...
-
-#      - name: Upload code coverage
-#        uses: codecov/codecov-action@v2
-#        with:
-#          flags: unittests
-#          required: true
-#          fail_ci_if_error: true
