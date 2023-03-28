@@ -26,14 +26,14 @@ jobs:
         run: |
           go mod download
 
-      - name: Generate wire_gen.go
-        run: |
-          cd pkg/di && go run github.com/google/wire/cmd/wire
-
-      - name: Generate Swagger docs
-        run: |
-          cd cmd/api && go get -u github.com/swaggo/swag/cmd/swag
-          swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
+#      - name: Generate wire_gen.go
+#        run: |
+#          cd pkg/di && go run github.com/google/wire/cmd/wire
+#
+#      - name: Generate Swagger docs
+#        run: |
+#          cd cmd/api && go get -u github.com/swaggo/swag/cmd/swag
+#          swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
 
       - name: Build the Go application
         run: |
