@@ -26,10 +26,15 @@ jobs:
       - name: Install dependencies
         run: |
           go mod download
-          go get github.com/google/subcommands
-          go get github.com/google/wire/cmd/wire@v0.5.0
-          go mod tidy
 
+      - name: Install subcommands
+          go get github.com/google/subcommands
+
+      - name: Install wire
+          go get github.com/google/wire/cmd/wire@v0.5.0
+
+      - name: Go mod tidy          
+          go mod tidy
 
       - name: Generate wire_gen.go
         run: |
